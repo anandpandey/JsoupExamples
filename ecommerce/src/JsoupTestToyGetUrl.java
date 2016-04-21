@@ -34,7 +34,7 @@ public class JsoupTestToyGetUrl {
 		BufferedReader br = new BufferedReader(new FileReader("config/keywords.txt"));
 
 		// Writer
-		File file = new File("output/toyurl.csv");
+		File file = new File("output/toyurl_batch7.csv");
 		// if file doesn't exists, then create it
 		if (!file.exists()) {
 			file.createNewFile();

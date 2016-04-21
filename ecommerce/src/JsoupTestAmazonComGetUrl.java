@@ -1,38 +1,34 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.*;
 
 /**
  * @author pandey
  *
  */
-public class JsoupTest {
+public class JsoupTestAmazonComGetUrl {
+
+	private static final String AMAZON_STORY_URL = "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=";
+
+	private static final String AMAZON_WEBSITE = "http://www.amazon.co.uk";
 
 	/**
 	 *
-	 * 
 	 */
-	public JsoupTest() {
+	public JsoupTestAmazonComGetUrl() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public static void main(String[] args) throws IOException {
 
 		// Reader
-		BufferedReader br = new BufferedReader(new FileReader("config/url.txt"));
+		BufferedReader br = new BufferedReader(new FileReader("config/keywords_amazoncom.txt"));
 
 		// Writer
-		File file = new File("output/values.csv");
+		File file = new File("output/amazoncomurlbatch7.csv");
 		// if file doesn't exists, then create it
 		if (!file.exists()) {
 			file.createNewFile();
@@ -49,8 +45,10 @@ public class JsoupTest {
 
 				try {
 					out.println(fetchAndPrintData(line));
+					out.flush();
 					line = br.readLine();
 				} catch (IOException e) {
+					System.out.println(line);
 					e.printStackTrace();
 				}
 
@@ -64,31 +62,35 @@ public class JsoupTest {
 	}
 
 	private static String fetchAndPrintData(String url1) throws IOException {
-		Document doc = Jsoup.connect(url1).get();
 
 		StringBuilder sb = new StringBuilder();
-
-		sb.append(url1.substring(url1.indexOf("keywords=") + 9));
+		sb.append(url1);
+		
 		sb.append(",");
+		
+		url1 = AMAZON_STORY_URL.concat(url1);
 
-		Elements newsHeadlines = doc.select("#prodDetails table tbody tr");
+//		try {
+//			Thread.sleep(500);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 
-		int i = 0;
+		Document doc = Jsoup.connect(url1).get();
+
+
+		Elements newsHeadlines = doc.getElementsByTag("a");
+
 		for (Element element : newsHeadlines) {
-			if (i == 3) {
+
+			if (element.attr("class").contains("a-link-normal a-text-normal")) {
+				System.out.println(element.attr("href"));
+				sb.append(element.attr("href"));
 				break;
 			}
 
-			sb.append(element.getElementsByClass("value").text());
-			sb.append(",");
-			i++;
 		}
 
-		Elements newsHeadlines1 = doc.select("#productDescription p");
-		if( newsHeadlines1 != null && newsHeadlines1.first() != null){
-		sb.append(newsHeadlines1.first().text());
-}
-		System.out.println(sb.toString());
 		return sb.toString();
 	}
 
