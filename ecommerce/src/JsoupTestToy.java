@@ -24,7 +24,7 @@ public class JsoupTestToy {
 		BufferedReader br = new BufferedReader(new FileReader("config/url.txt"));
 
 		// Writer
-		File file = new File("output/values.csv");
+		File file = new File("output/Batch_7_data/values_Batch7P1.csv");
 		// if file doesn't exists, then create it
 		if (!file.exists()) {
 			file.createNewFile();
@@ -107,6 +107,7 @@ public class JsoupTestToy {
 			Elements descriptionElement = element.getElementsByClass("std");
 			if (descriptionElement != null && descriptionElement.first() != null) {
 				sb.append(descriptionElement.first().text());
+				break;
 			}
 		}
 

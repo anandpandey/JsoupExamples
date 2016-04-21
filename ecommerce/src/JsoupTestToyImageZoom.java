@@ -20,7 +20,7 @@ import org.jsoup.select.Elements;
 public class JsoupTestToyImageZoom {
 
 	private static final String TOY_STORY_URL = "http://www.thetoystore.com";
-	private static final String IMAGE_FOLDER = "output/images/";
+	private static final String IMAGE_FOLDER = "output/images_toyb7Part4/";
 
 	public JsoupTestToyImageZoom() {
 		// TODO Auto-generated constructor stub
@@ -48,6 +48,7 @@ public class JsoupTestToyImageZoom {
 					fetchImageUrlAndCreateImage(line);
 					line = br.readLine();
 				} catch (IOException e) {
+					System.out.println(line);
 					e.printStackTrace();
 					line = br.readLine();
 				}

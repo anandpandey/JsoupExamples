@@ -16,7 +16,7 @@ import org.jsoup.select.Elements;
  * @author pandey
  *
  */
-public class JsoupTestToyImage {
+public class JsoupTestUpcItemDbImage {
 
 	private static final String UPC_URL = "http://www.upcitemdb.com/upc/";
 
@@ -25,7 +25,7 @@ public class JsoupTestToyImage {
 	/**
 	 * 
 	 */
-	public JsoupTestToyImage() {
+	public JsoupTestUpcItemDbImage() {
 		// TODO Auto-generated constructor stub
 	}
 

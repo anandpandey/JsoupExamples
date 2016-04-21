@@ -1,40 +1,34 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.*;
+
 /**
  * @author pandey
  *
  */
-public class JsoupTestToyGetUrl {
+public class JsoupTestAmazonComGetUrl {
 
-	private static final String TOY_STORY_URL = "http://www.thetoystore.com/uae/catalogsearch/result/?q=";
-	
-	private static final String TOY_WEBSITE = "http://www.thetoystore.com";
-	
+	private static final String AMAZON_STORY_URL = "https://www.amazon.com/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=";
+
+	private static final String AMAZON_WEBSITE = "http://www.amazon.co.uk";
+
 	/**
-	 * 
+	 *
 	 */
-	public JsoupTestToyGetUrl() {
+	public JsoupTestAmazonComGetUrl() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public static void main(String[] args) throws IOException {
 
 		// Reader
-		BufferedReader br = new BufferedReader(new FileReader("config/keywords.txt"));
+		BufferedReader br = new BufferedReader(new FileReader("config/keywords_amazoncom.txt"));
 
 		// Writer
-		File file = new File("output/toyurl_batch7.csv");
+		File file = new File("output/amazoncomurlbatch7.csv");
 		// if file doesn't exists, then create it
 		if (!file.exists()) {
 			file.createNewFile();
@@ -51,8 +45,10 @@ public class JsoupTestToyGetUrl {
 
 				try {
 					out.println(fetchAndPrintData(line));
+					out.flush();
 					line = br.readLine();
 				} catch (IOException e) {
+					System.out.println(line);
 					e.printStackTrace();
 				}
 
@@ -72,22 +68,27 @@ public class JsoupTestToyGetUrl {
 		
 		sb.append(",");
 		
-		url1 = TOY_STORY_URL.concat(url1);
-		
-		System.out.println(url1);
-		
+		url1 = AMAZON_STORY_URL.concat(url1);
+
+//		try {
+//			Thread.sleep(500);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+
 		Document doc = Jsoup.connect(url1).get();
 
 
-
-		Elements newsHeadlines = doc.getElementsByClass("product-image");
+		Elements newsHeadlines = doc.getElementsByTag("a");
 
 		for (Element element : newsHeadlines) {
 
-			String value = element.attr("href").toString();
-			
-			sb.append(TOY_WEBSITE.concat(value));
-				
+			if (element.attr("class").contains("a-link-normal a-text-normal")) {
+				System.out.println(element.attr("href"));
+				sb.append(element.attr("href"));
+				break;
+			}
+
 		}
 
 		return sb.toString();
